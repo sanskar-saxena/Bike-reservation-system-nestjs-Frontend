@@ -1,0 +1,15 @@
+main{
+  min-height: 80vh;
+}
+
+
+.img {
+  float: left;
+  width:  240px;
+  height: 175px;
+  object-fit: cover;
+}
+
+.rating span{
+  margin: 0.1rem;
+}
