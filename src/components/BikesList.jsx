@@ -57,13 +57,21 @@ function BikesList() {
     setIsAvailable("");
     setStartDate("");
     setEndDate("");
-    const filter = {color: "", model: "", location: "", isAvailable: "", avgRating:"", startDate: "", endDate: ""}
-    dispatch(
-      bikeList(
-        filter,
-        page
-      )
-    );
+    const filter = {
+      color: "",
+      model: "",
+      location: "",
+      isAvailable: "",
+      avgRating: "",
+      startDate: "",
+      endDate: "",
+    };
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] === "") {
+        delete filter[key];
+      }
+    });
+    dispatch(bikeList(filter, page));
   };
   const filterHandler = async () => {
     if (
@@ -77,40 +85,44 @@ function BikesList() {
       toast.error("Start Date cannot be greater than End Date");
       return;
     }
-    dispatch(
-      bikeList(
-        {
-          color,
-          location,
-          model,
-          avgRating,
-          isAvailable,
-          startDate,
-          endDate,
-        },
-        page
-      )
-    );
+    let filter = {
+      color,
+      location,
+      model,
+      avgRating,
+      isAvailable,
+      startDate,
+      endDate,
+    };
+
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] === "") {
+        delete filter[key];
+      }
+    });
+    dispatch(bikeList(filter, page));
   };
 
   useEffect(() => {
     if (page !== +params.pageNum) {
       setPage(+params.pageNum);
     }
-    dispatch(
-      bikeList(
-        {
-          color,
-          location,
-          model,
-          avgRating,
-          isAvailable,
-          startDate,
-          endDate,
-        },
-        +params.pageNum
-      )
-    );
+    let filter = {
+      color,
+      location,
+      model,
+      avgRating,
+      isAvailable,
+      startDate,
+      endDate,
+    };
+
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] === "") {
+        delete filter[key];
+      }
+    });
+    dispatch(bikeList(filter, +params.pageNum));
   }, [dispatch, params.pageNum, page]);
 
   return (
@@ -187,6 +199,7 @@ function BikesList() {
                   <Form.Control
                     type="text"
                     placeholder="Enter Model"
+                    value={model}
                     onChange={(e) => setModel(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
@@ -252,11 +265,11 @@ function BikesList() {
               </Col>
             </Row>
           </Container>
-          {bikes.length === 0 ? (
+          {bikes?.length === 0 ? (
             <NoDataFound displayText="No bikes available" />
           ) : (
             <Row>
-              {bikes.map((bike) => {
+              {bikes?.map((bike) => {
                 return (
                   <Col key={bike.id} sm={14} md={7} lg={5} xl={4}>
                     <BikeCard bike={bike} />

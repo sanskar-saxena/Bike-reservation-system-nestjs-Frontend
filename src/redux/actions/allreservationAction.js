@@ -1,6 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
+
 export const RESERVATION_LIST_REQ = "RESERVATION_LIST_REQ";
 export const RESERVATION_LIST_SUCCESS = "RESERVATION_LIST_SUCCESS";
 export const RESERVATION_LIST_FAIL = "RESERVATION_LIST_FAIL";
@@ -87,7 +89,7 @@ export const createReservation =
       );
 
       console.log(data);
-      
+      toast.success("Reservation Created Successfully")
       dispatch({
         type: RESERVATION_CREATE_SUCCESS,
         payload: data,
@@ -99,9 +101,10 @@ export const createReservation =
       },3000)
 
     } catch (error) {
+      console.log(error);
       dispatch({
         type: RESERVATION_CREATE_FAIL,
-        payload: error.response && error.response.data ? error.response.data : error.message,
+        payload: error.response.data.message,
       });
       setTimeout(()=>{
         dispatch({

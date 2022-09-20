@@ -59,10 +59,7 @@ const ReserveBikes = () => {
   const { loading: userLoading, error: userError, userInfo } = userLogin;
 
   const createReservations = useSelector((state) => state.createReservation);
-  const {
-    loading: reserveLoading,
-    error: reserveError,
-  } = createReservations;
+  const { loading: reserveLoading, error: reserveError } = createReservations;
 
   const formatDate = (date) => {
     console.log(date);
@@ -71,6 +68,20 @@ const ReserveBikes = () => {
     const day = date.getDate();
     return `${year}-${month}-${day}`;
   };
+
+  const reservationList = useSelector((state) => state.reservationList);
+  console.log(reservationList);
+
+  let { reservations } = reservationList;
+  // console.log(reservations);
+
+  if (reservations) {
+    reservations = reservations.filter(
+      (bike) => bike.bikeId === +params.bikeId
+    );
+  }
+
+  // console.log(reservations);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -118,9 +129,9 @@ const ReserveBikes = () => {
       endDateX.getTime() > bike.endDate
     ) {
       toast.error("Enter dates in availability of bike");
-    } else if (startDateX.getTime() < endDateX.getTime()) {
-      setIsAvailable(false);
-      setSuccess(true);
+    } else if (startDateX.getTime() <= endDateX.getTime()) {
+
+      
       dispatch(
         createReservation({
           bikeId: +params.bikeId,
@@ -130,19 +141,6 @@ const ReserveBikes = () => {
           status: "BOOKED",
         })
       );
-      dispatch(
-        updateBike({
-          id: +params.bikeId,
-          
-          isAvailable,
-        })
-      );
-      // navigate(`/bike/page/1`, { replace: true });
-      setTimeout(()=>{
-        window.location.reload(false);
-      },400)
-    } else if (startDateX.getTime() === endDateX.getTime()) {
-      toast.error("Start Date cannot be equal to End date");
     } else {
       toast.error("Start Date cannot be greater than End date");
     }
@@ -173,7 +171,6 @@ const ReserveBikes = () => {
               {reserveError && (
                 <Message variant="danger">{reserveError}</Message>
               )}
-              {success && toast.success("Reservation Created Successfully!")}
 
               <ListGroup variant="flush">
                 <ListGroup.Item>

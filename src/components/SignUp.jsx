@@ -44,7 +44,7 @@ const SignUp = () => {
       }
     }
 
-    if (password.trim().length <= 5) {
+    if (password.length <= 5) {
       toast.error("Password must have more than 5 characters");
       return;
     }
@@ -58,7 +58,7 @@ const SignUp = () => {
         return;
       }
     }
-    dispatch(signUp(email, password, name));
+    dispatch(signUp(email.trim().toLowerCase(), password, name.trim()));
   };
 
   useEffect(() => {

@@ -19,7 +19,7 @@ const Login = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => { 
     e.preventDefault();
 
     if (email.trim().length === 0) {
@@ -37,12 +37,12 @@ const Login = () => {
       }
     }
 
-    if (password.trim().length <= 5) {
+    if (password.length <= 5) {
       toast.error("Password must have more than 5 characters");
       return;
     }
     e.preventDefault();
-    dispatch(logIn(email, password));
+    dispatch(logIn(email.trim().toLowerCase(), password));
     
   };
 

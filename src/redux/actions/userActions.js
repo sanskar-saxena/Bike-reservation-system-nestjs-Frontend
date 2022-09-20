@@ -110,6 +110,7 @@ export const signUp =
       });
       toast("Signup Succesful!");
     } catch (error) {
+      console.log(error);
       dispatch({
         type: USER_SIGNUP_FAIL,
         payload: error.response.data.message,
